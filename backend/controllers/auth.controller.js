@@ -1,11 +1,15 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import json from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
-    
+
+    if(!name || !username || !email || !password ) {
+        return res.status(400).json({message: "All fiedls are required"});
+    }
+
     const existingMail = await User.findOne({ email });
     if (existingMail) {
       return res.status(400).json({ message: "Email already exists" });
